@@ -1,0 +1,18 @@
+.NotFound {
+  width: 100vw;
+  height: 100vh;
+  background-color: #464646;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+h1 {
+  font-size: 5rem;
+}
+
+p {
+  font-size: 1.5rem;
+}
