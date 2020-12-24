@@ -18,7 +18,15 @@ h1 {
 }
 
 input {
-  font-family: inherit;
+  font: inherit;
   border: none;
   outline: none;
+}
+
+button {
+  font: inherit;
+  border: none;
+  outline: none;
+  background-color: inherit;
+  cursor: pointer;
 }
