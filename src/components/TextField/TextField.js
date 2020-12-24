@@ -7,6 +7,8 @@ const TextField = props => {
       placeholder={props.placeholder}
       type={props.type}
       autoFocus={props.autoFocus}
+      value={props.value}
+      onChange={props.onChange}
     />
   );
 };
