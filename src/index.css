@@ -16,3 +16,9 @@ body {
 h1 {
   margin: 0;
 }
+
+input {
+  font-family: inherit;
+  border: none;
+  outline: none;
+}
