@@ -1,7 +1,7 @@
 .NotFound {
   width: 100vw;
   height: 100vh;
-  background-color: #464646;
+  background-color: var(--main-background-color);
   display: flex;
   flex-direction: column;
   justify-content: center;
