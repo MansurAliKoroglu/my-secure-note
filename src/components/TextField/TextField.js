@@ -9,6 +9,8 @@ const TextField = props => {
       autoFocus={props.autoFocus}
       value={props.value}
       onChange={props.onChange}
+      onBlur={props.onBlur}
+      name={props.name}
     />
   );
 };

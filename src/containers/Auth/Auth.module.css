@@ -27,10 +27,6 @@
   margin-bottom: 1.5rem;
 }
 
-.Input {
-  margin: 0.3rem 0;
-}
-
 .LoginButton {
   color: var(--main-background-color);
   font-weight: bold;
@@ -38,4 +34,19 @@
   padding: 0.5rem;
   margin-top: 1rem;
   width: 110px;
+}
+
+.ErrorMessageArea {
+  width: 100%;
+  margin-top: 0.2rem;
+  margin-bottom: 1.1rem;
+  margin-left: 1rem;
+  position: relative;
+}
+
+.ErrorMessageArea p {
+  margin: 0;
+  position: absolute;
+  font-size: 0.7rem;
+  color: rgb(240, 50, 30);
 }
