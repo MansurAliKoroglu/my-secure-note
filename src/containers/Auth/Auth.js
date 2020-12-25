@@ -2,6 +2,7 @@ import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'react-loader-spinner';
+import { useHistory } from 'react-router-dom';
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import classes from './Auth.module.css';
@@ -13,9 +14,10 @@ const Auth = () => {
   const errorMessage = useSelector(state => state.auth.errorMessage);
   const isSigningIn = useSelector(state => state.auth.isSigningIn);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const onSubmit = values => {
-    dispatch(signIn(values.email, values.password));
+    dispatch(signIn(values.email, values.password, history));
   };
 
   const errorMessageArea = (formik, type) => {

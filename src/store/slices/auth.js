@@ -1,15 +1,16 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 
-const signIn = (email, password) => {
+const signIn = (email, password, history) => {
   return async dispatch => {
     dispatch(authSlice.actions.setIsSigningIn(true));
     dispatch(authSlice.actions.setError(null));
 
+    let response;
     let errorMessage;
 
     try {
-      await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAKTYgjtDgcF2k_1aFZtRCAwz88N3W6PGg', {
+      response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAKTYgjtDgcF2k_1aFZtRCAwz88N3W6PGg', {
         email,
         password,
         returnSecureToken: true
@@ -29,7 +30,13 @@ const signIn = (email, password) => {
         dispatch(authSlice.actions.setError('Unexpected error occured. Please try again.'));
       }
     } else {
-      // TODO: Handle status 200 here.
+      history.push('/');
+
+      dispatch(authSlice.actions.setAuthInfo({
+        idToken: response.data.idToken,
+        refreshToken: response.data.refreshToken,
+        expiresIn: response.data.expiresIn,
+      }));
     }
 
     dispatch(authSlice.actions.setIsSigningIn(false));
@@ -40,7 +47,10 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     isSigningIn: false,
-    errorMessage: null
+    errorMessage: null,
+    idToken: '',
+    refreshToken: '',
+    expiresIn: 0
   },
   reducers: {
     setIsSigningIn(state, action) {
@@ -48,6 +58,11 @@ const authSlice = createSlice({
     },
     setError(state, action) {
       state.errorMessage = action.payload;
+    },
+    setAuthInfo(state, actions) {
+      state.idToken = actions.payload.idToken;
+      state.refreshToken = actions.payload.refreshToken;
+      state.expiresIn = actions.payload.expiresIn;
     }
   }
 });
