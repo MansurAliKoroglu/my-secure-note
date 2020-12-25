@@ -1,7 +1,9 @@
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import Loader from 'react-loader-spinner';
 
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import classes from './Auth.module.css';
 
 import TextField from '../../components/TextField/TextField';
@@ -9,6 +11,7 @@ import { signIn } from '../../store/slices/auth';
 
 const Auth = () => {
   const errorMessage = useSelector(state => state.auth.errorMessage);
+  const isSigningIn = useSelector(state => state.auth.isSigningIn);
   const dispatch = useDispatch();
 
   const onSubmit = values => {
@@ -23,6 +26,25 @@ const Auth = () => {
     );
   };
 
+  let signInButton;
+
+  if (!isSigningIn) {
+    signInButton =
+      <button
+        type="submit"
+        className={classes.LoginButton}
+      >
+        SIGN IN
+    </button>;
+  } else {
+    signInButton =
+      <Loader
+        type="TailSpin"
+        color="#00BFFF"
+        height={50}
+      />;
+  }
+
   return (
     <div className={classes.Auth}>
       <Formik
@@ -32,8 +54,8 @@ const Auth = () => {
         }}
         validationSchema={
           yup.object({
-            email: yup.string().email('Must be a valid email.'),
-            password: yup.string().min(6, 'Password must be minimum 6 characters.')
+            email: yup.string().required('Email is required').email('Must be a valid email.'),
+            password: yup.string().required('Password is required').min(6, 'Password must be minimum 6 characters.')
           })
         }
         onSubmit={onSubmit}
@@ -57,12 +79,7 @@ const Auth = () => {
                   {...formik.getFieldProps('password')}
                 />
                 {errorMessageArea(formik, 'password')}
-                <button
-                  type="submit"
-                  className={classes.LoginButton}
-                >
-                  SIGN IN
-                </button>
+                {signInButton}
                 <div className={classes.ServerErrorMessageArea}>
                   <p>
                     {errorMessage}

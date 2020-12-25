@@ -3,6 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const signIn = (email, password) => {
   return async dispatch => {
+    dispatch(authSlice.actions.setIsSigningIn(true));
+    dispatch(authSlice.actions.setError(null));
+
     let errorMessage;
 
     try {
@@ -28,15 +31,21 @@ const signIn = (email, password) => {
     } else {
       // TODO: Handle status 200 here.
     }
+
+    dispatch(authSlice.actions.setIsSigningIn(false));
   }
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    errorMessage: ''
+    isSigningIn: false,
+    errorMessage: null
   },
   reducers: {
+    setIsSigningIn(state, action) {
+      state.isSigningIn = action.payload;
+    },
     setError(state, action) {
       state.errorMessage = action.payload;
     }
