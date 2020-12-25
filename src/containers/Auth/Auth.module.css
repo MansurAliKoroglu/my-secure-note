@@ -42,11 +42,26 @@
   margin-bottom: 1.1rem;
   margin-left: 1rem;
   position: relative;
+  color: var(--main-error-color);
+  font-size: 0.7rem;
 }
 
 .ErrorMessageArea p {
   margin: 0;
   position: absolute;
-  font-size: 0.7rem;
-  color: rgb(240, 50, 30);
+}
+
+.ServerErrorMessageArea {
+  width: 100%;
+  height: 19px;
+  margin: 8px 0;
+  position: relative;
+  color: var(--main-error-color);
+  text-align: center;
+}
+
+.ServerErrorMessageArea p {
+  width: 100%;
+  margin: 5px 0;
+  position: absolute;
 }

@@ -2,6 +2,7 @@
 
 :root {
   --main-background-color: #464646;
+  --main-error-color: rgb(240, 50, 30);
 }
 
 * {

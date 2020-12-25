@@ -1,15 +1,20 @@
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
 
 import classes from './Auth.module.css';
 
 import TextField from '../../components/TextField/TextField';
-
-const onSubmit = () => {
-  // TODO: Submit will be handled here
-};
+import { signIn } from '../../store/slices/auth';
 
 const Auth = () => {
+  const errorMessage = useSelector(state => state.auth.errorMessage);
+  const dispatch = useDispatch();
+
+  const onSubmit = values => {
+    dispatch(signIn(values.email, values.password));
+  };
+
   const errorMessageArea = (formik, type) => {
     return (
       <div className={classes.ErrorMessageArea}>
@@ -57,7 +62,12 @@ const Auth = () => {
                   className={classes.LoginButton}
                 >
                   SIGN IN
-              </button>
+                </button>
+                <div className={classes.ServerErrorMessageArea}>
+                  <p>
+                    {errorMessage}
+                  </p>
+                </div>
               </Form>
             )
           }
