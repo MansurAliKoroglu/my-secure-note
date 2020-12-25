@@ -30,13 +30,13 @@ const signIn = (email, password, history) => {
         dispatch(authSlice.actions.setError('Unexpected error occured. Please try again.'));
       }
     } else {
-      history.push('/');
-
       dispatch(authSlice.actions.setAuthInfo({
         idToken: response.data.idToken,
         refreshToken: response.data.refreshToken,
         expiresIn: response.data.expiresIn,
       }));
+
+      history.push('/');
     }
 
     dispatch(authSlice.actions.setIsSigningIn(false));
