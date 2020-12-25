@@ -48,9 +48,9 @@ const authSlice = createSlice({
   initialState: {
     isSigningIn: false,
     errorMessage: null,
-    idToken: '',
-    refreshToken: '',
-    expiresIn: 0
+    idToken: null,
+    refreshToken: null,
+    expiresIn: null
   },
   reducers: {
     setIsSigningIn(state, action) {
