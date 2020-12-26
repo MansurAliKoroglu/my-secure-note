@@ -10,3 +10,13 @@ export const signIn = async (email, password) => {
     }
   );
 };
+
+export const refresh = async refreshToken => {
+  return await axios.post(
+    'https://securetoken.googleapis.com/v1/token?key=AIzaSyAKTYgjtDgcF2k_1aFZtRCAwz88N3W6PGg',
+    {
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken
+    }
+  );
+};
