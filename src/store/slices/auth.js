@@ -77,10 +77,10 @@ const authSlice = createSlice({
     setError(state, action) {
       state.errorMessage = action.payload;
     },
-    setAuthInfo(state, actions) {
-      state.idToken = actions.payload.idToken;
-      state.refreshToken = actions.payload.refreshToken;
-      state.expiresIn = actions.payload.expiresIn;
+    setAuthInfo(state, action) {
+      state.idToken = action.payload.idToken;
+      state.refreshToken = action.payload.refreshToken;
+      state.expiresIn = action.payload.expiresIn;
     }
   }
 });
