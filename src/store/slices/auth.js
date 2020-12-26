@@ -1,6 +1,7 @@
-import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import Cookies from 'universal-cookie';
+
+import * as authApi from '../../api/auth';
 
 const signIn = (email, password, history) => {
   return async dispatch => {
@@ -11,11 +12,7 @@ const signIn = (email, password, history) => {
     let errorMessage;
 
     try {
-      response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAKTYgjtDgcF2k_1aFZtRCAwz88N3W6PGg', {
-        email,
-        password,
-        returnSecureToken: true
-      });
+      response = await authApi.signIn(email, password);
     } catch (error) {
       errorMessage = error.response.data.error.message;
     }
