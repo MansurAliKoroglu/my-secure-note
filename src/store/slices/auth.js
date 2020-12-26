@@ -61,10 +61,75 @@ const signIn = (email, password, history) => {
   }
 };
 
+const refresh = () => {
+  return async dispatch => {
+    dispatch(authSlice.actions.setIsRefreshing(true));
+
+    const cookies = new Cookies();
+
+    const refreshToken = cookies.get('refreshToken');
+
+    if (!refreshToken) {
+      dispatch(authSlice.actions.setIsRefreshing(false));
+
+      return;
+    }
+
+    let response;
+    let errorMessage;
+
+    try {
+      response = await authApi.refresh(refreshToken);
+    } catch (error) {
+      errorMessage = error.response.data.error.message;
+    }
+
+    if (
+      errorMessage === 'TOKEN_EXPIRED' ||
+      errorMessage === 'USER_DISABLED' ||
+      errorMessage === 'USER_NOT_FOUND'
+    ) {
+      cookies.remove('idToken');
+      cookies.remove('refreshToken');
+      cookies.remove('expiresIn');
+    }
+
+    if (response) {
+      cookies.set(
+        'idToken',
+        response.data.id_token,
+        {
+          secure: true
+        }
+      );
+      cookies.set(
+        'refreshToken',
+        response.data.refresh_token,
+        {
+          secure: true
+        }
+      );
+      cookies.set(
+        'expiresIn',
+        response.data.expires_in
+      );
+
+      dispatch(authSlice.actions.setAuthInfo({
+        idToken: response.data.id_token,
+        refreshToken: response.data.refresh_token,
+        expiresIn: response.data.expires_in,
+      }));
+    }
+
+    dispatch(authSlice.actions.setIsRefreshing(false));
+  };
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     isSigningIn: false,
+    isRefreshing: false,
     errorMessage: null,
     idToken: null,
     refreshToken: null,
@@ -73,6 +138,9 @@ const authSlice = createSlice({
   reducers: {
     setIsSigningIn(state, action) {
       state.isSigningIn = action.payload;
+    },
+    setIsRefreshing(state, action) {
+      state.isRefreshing = action.payload;
     },
     setError(state, action) {
       state.errorMessage = action.payload;
@@ -87,4 +155,4 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-export { signIn };
+export { signIn, refresh };
