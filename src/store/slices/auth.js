@@ -3,6 +3,71 @@ import Cookies from 'universal-cookie';
 
 import * as authApi from '../../api/auth';
 
+const setAuthInfoToCookies = (idToken, refreshToken, expiresIn) => {
+  const cookies = new Cookies();
+  cookies.set(
+    'idToken',
+    idToken,
+    {
+      path: '/',
+      secure: true
+    }
+  );
+  cookies.set(
+    'refreshToken',
+    refreshToken,
+    {
+      path: '/',
+      secure: true
+    }
+  );
+  cookies.set(
+    'expiresIn',
+    expiresIn,
+    {
+      path: '/'
+    }
+  );
+};
+
+const signUp = (email, password, history) => {
+  return async dispatch => {
+    dispatch(authSlice.actions.setIsSigningIn(true));
+    dispatch(authSlice.actions.setError(null));
+
+    let response;
+    let errorMessage;
+
+    try {
+      response = await authApi.signUp(email, password);
+    } catch (error) {
+      errorMessage = error.response.data.error.message;
+    }
+
+    if (errorMessage) {
+      if (errorMessage === 'EMAIL_EXISTS') {
+        dispatch(authSlice.actions.setError('This email already in use!'));
+      } else if (errorMessage === 'TOO_MANY_ATTEMPTS_TRY_LATER') {
+        dispatch(authSlice.actions.setError('Too many signup attempt. Please try again later.'));
+      } else {
+        dispatch(authSlice.actions.setError('Unexpected error occured. Please try again.'));
+      }
+    } else {
+      setAuthInfoToCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
+
+      dispatch(authSlice.actions.setAuthInfo({
+        idToken: response.data.idToken,
+        refreshToken: response.data.refreshToken,
+        expiresIn: response.data.expiresIn,
+      }));
+
+      history.push('/');
+    }
+
+    dispatch(authSlice.actions.setIsSigningIn(false));
+  }
+};
+
 const signIn = (email, password, history) => {
   return async dispatch => {
     dispatch(authSlice.actions.setIsSigningIn(true));
@@ -28,25 +93,7 @@ const signIn = (email, password, history) => {
         dispatch(authSlice.actions.setError('Unexpected error occured. Please try again.'));
       }
     } else {
-      const cookies = new Cookies();
-      cookies.set(
-        'idToken',
-        response.data.idToken,
-        {
-          secure: true
-        }
-      );
-      cookies.set(
-        'refreshToken',
-        response.data.refreshToken,
-        {
-          secure: true
-        }
-      );
-      cookies.set(
-        'expiresIn',
-        response.data.expiresIn
-      );
+      setAuthInfoToCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
 
       dispatch(authSlice.actions.setAuthInfo({
         idToken: response.data.idToken,
@@ -95,24 +142,7 @@ const refresh = () => {
     }
 
     if (response) {
-      cookies.set(
-        'idToken',
-        response.data.id_token,
-        {
-          secure: true
-        }
-      );
-      cookies.set(
-        'refreshToken',
-        response.data.refresh_token,
-        {
-          secure: true
-        }
-      );
-      cookies.set(
-        'expiresIn',
-        response.data.expires_in
-      );
+      setAuthInfoToCookies(response.data.id_token, response.data.refresh_token, response.data.expires_in);
 
       dispatch(authSlice.actions.setAuthInfo({
         idToken: response.data.id_token,
@@ -155,4 +185,4 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-export { signIn, refresh };
+export { signUp, signIn, refresh };

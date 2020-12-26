@@ -1,31 +1,48 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from 'react-loader-spinner';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import classes from './Auth.module.css';
 
 import TextField from '../../components/TextField/TextField';
-import { signIn } from '../../store/slices/auth';
+import { signUp, signIn } from '../../store/slices/auth';
 
 const Auth = () => {
+  const [isAuthModeSignInState, setIsAuthModeSignInState] = useState(true);
+
   const errorMessage = useSelector(state => state.auth.errorMessage);
   const isSigningIn = useSelector(state => state.auth.isSigningIn);
   const idToken = useSelector(state => state.auth.idToken);
   const dispatch = useDispatch();
+
   const history = useHistory();
 
   useEffect(() => {
     if (idToken) {
       history.replace('/');
     }
+
+    if (history.location.pathname === '/auth') {
+      history.replace('/auth/sign-in');
+    }
+
+    if (history.location.pathname === '/auth/sign-in') {
+      setIsAuthModeSignInState(true)
+    } else {
+      setIsAuthModeSignInState(false);
+    }
   }, [idToken, history]);
 
   const onSubmit = values => {
-    dispatch(signIn(values.email, values.password, history));
+    if (isAuthModeSignInState) {
+      dispatch(signIn(values.email, values.password, history));
+    } else {
+      dispatch(signUp(values.email, values.password, history));
+    }
   };
 
   const errorMessageArea = (formik, type) => {
@@ -44,8 +61,8 @@ const Auth = () => {
         type="submit"
         className={classes.LoginButton}
       >
-        SIGN IN
-    </button>;
+        {isAuthModeSignInState ? 'SIGN IN' : 'SIGN UP'}
+      </button>;
   } else {
     signInButton =
       <Loader
@@ -96,6 +113,9 @@ const Auth = () => {
                       {errorMessage}
                     </p>
                   </div>
+                  <Link onClick={() => {
+                    setIsAuthModeSignInState(!isAuthModeSignInState);
+                  }} to={`/auth/${isAuthModeSignInState ? 'sign-up' : 'sign-in'}`}>{isAuthModeSignInState ? 'Sign up now' : 'Sign in'}</Link>
                 </Form>
               )
             }

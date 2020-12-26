@@ -31,3 +31,8 @@ button {
   background-color: inherit;
   cursor: pointer;
 }
+
+a {
+  color: #1365e9;
+  text-decoration: inherit;
+}
