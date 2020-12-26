@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
+import Cookies from 'universal-cookie';
 
 const signIn = (email, password, history) => {
   return async dispatch => {
@@ -30,6 +31,26 @@ const signIn = (email, password, history) => {
         dispatch(authSlice.actions.setError('Unexpected error occured. Please try again.'));
       }
     } else {
+      const cookies = new Cookies();
+      cookies.set(
+        'idToken',
+        response.data.idToken,
+        {
+          secure: true
+        }
+      );
+      cookies.set(
+        'refreshToken',
+        response.data.refreshToken,
+        {
+          secure: true
+        }
+      );
+      cookies.set(
+        'expiresIn',
+        response.data.expiresIn
+      );
+
       dispatch(authSlice.actions.setAuthInfo({
         idToken: response.data.idToken,
         refreshToken: response.data.refreshToken,
