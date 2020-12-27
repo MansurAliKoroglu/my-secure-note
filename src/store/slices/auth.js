@@ -3,8 +3,9 @@ import Cookies from 'universal-cookie';
 
 import api from '../../api';
 
-const setAuthInfoToCookies = (idToken, refreshToken, expiresIn) => {
+const setAuthInfoCookies = (idToken, refreshToken, expiresIn) => {
   const cookies = new Cookies();
+
   cookies.set(
     'idToken',
     idToken,
@@ -35,25 +36,10 @@ const signUp = (email, password, history) => {
     dispatch(authSlice.actions.setIsSigningIn(true));
     dispatch(authSlice.actions.setError(null));
 
-    let response;
-    let errorMessage;
-
     try {
-      response = await api.auth.signUp(email, password);
-    } catch (error) {
-      errorMessage = error.response.data.error.message;
-    }
+      const response = await api.auth.signUp(email, password);
 
-    if (errorMessage) {
-      if (errorMessage === 'EMAIL_EXISTS') {
-        dispatch(authSlice.actions.setError('This email already in use!'));
-      } else if (errorMessage === 'TOO_MANY_ATTEMPTS_TRY_LATER') {
-        dispatch(authSlice.actions.setError('Too many signup attempt. Please try again later.'));
-      } else {
-        dispatch(authSlice.actions.setError('Unexpected error occured. Please try again.'));
-      }
-    } else {
-      setAuthInfoToCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
+      setAuthInfoCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
 
       dispatch(authSlice.actions.setAuthInfo({
         idToken: response.data.idToken,
@@ -62,6 +48,18 @@ const signUp = (email, password, history) => {
       }));
 
       history.push('/');
+    } catch (error) {
+      switch (error.response.data.error.message) {
+        case 'EMAIL_EXISTS':
+          dispatch(authSlice.actions.setError('This email already in use!'));
+          break;
+        case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+          dispatch(authSlice.actions.setError('Too many signup attempt. Please try again later.'));
+          break
+        default:
+          dispatch(authSlice.actions.setError('Unexpected error occured. Please try again.'));
+          break;
+      }
     }
 
     dispatch(authSlice.actions.setIsSigningIn(false));
@@ -73,27 +71,10 @@ const signIn = (email, password, history) => {
     dispatch(authSlice.actions.setIsSigningIn(true));
     dispatch(authSlice.actions.setError(null));
 
-    let response;
-    let errorMessage;
-
     try {
-      response = await api.auth.signIn(email, password);
-    } catch (error) {
-      errorMessage = error.response.data.error.message;
-    }
+      const response = await api.auth.signIn(email, password);
 
-    if (errorMessage) {
-      if (errorMessage === 'EMAIL_NOT_FOUND') {
-        dispatch(authSlice.actions.setError('Email not found!'));
-      } else if (errorMessage === 'INVALID_PASSWORD') {
-        dispatch(authSlice.actions.setError('Invalid Password!'));
-      } else if (errorMessage === 'USER_DISABLED') {
-        dispatch(authSlice.actions.setError('Your account has been blocked by an admin.'));
-      } else {
-        dispatch(authSlice.actions.setError('Unexpected error occured. Please try again.'));
-      }
-    } else {
-      setAuthInfoToCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
+      setAuthInfoCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
 
       dispatch(authSlice.actions.setAuthInfo({
         idToken: response.data.idToken,
@@ -102,6 +83,21 @@ const signIn = (email, password, history) => {
       }));
 
       history.push('/');
+    } catch (error) {
+      switch (error.response.data.error.message) {
+        case 'EMAIL_NOT_FOUND':
+          dispatch(authSlice.actions.setError('Email not found!'));
+          break;
+        case 'INVALID_PASSWORD':
+          dispatch(authSlice.actions.setError('Invalid Password!'));
+          break;
+        case 'USER_DISABLED':
+          dispatch(authSlice.actions.setError('Your account has been blocked by an admin.'));
+          break;
+        default:
+          dispatch(authSlice.actions.setError('Unexpected error occured. Please try again.'));
+          break;
+      }
     }
 
     dispatch(authSlice.actions.setIsSigningIn(false));
@@ -113,7 +109,6 @@ const refresh = () => {
     dispatch(authSlice.actions.setIsRefreshing(true));
 
     const cookies = new Cookies();
-
     const refreshToken = cookies.get('refreshToken');
 
     if (!refreshToken) {
@@ -122,33 +117,28 @@ const refresh = () => {
       return;
     }
 
-    let response;
-    let errorMessage;
-
     try {
-      response = await api.auth.refresh(refreshToken);
-    } catch (error) {
-      errorMessage = error.response.data.error.message;
-    }
+      const response = await api.auth.refresh(refreshToken);
 
-    if (
-      errorMessage === 'TOKEN_EXPIRED' ||
-      errorMessage === 'USER_DISABLED' ||
-      errorMessage === 'USER_NOT_FOUND'
-    ) {
-      cookies.remove('idToken');
-      cookies.remove('refreshToken');
-      cookies.remove('expiresIn');
-    }
-
-    if (response) {
-      setAuthInfoToCookies(response.data.id_token, response.data.refresh_token, response.data.expires_in);
+      setAuthInfoCookies(response.data.id_token, response.data.refresh_token, response.data.expires_in);
 
       dispatch(authSlice.actions.setAuthInfo({
         idToken: response.data.id_token,
         refreshToken: response.data.refresh_token,
         expiresIn: response.data.expires_in,
       }));
+    } catch (error) {
+      const errorMessage = error.response.data.error.message;
+
+      if (
+        errorMessage === 'TOKEN_EXPIRED' ||
+        errorMessage === 'USER_DISABLED' ||
+        errorMessage === 'USER_NOT_FOUND'
+      ) {
+        cookies.remove('idToken');
+        cookies.remove('refreshToken');
+        cookies.remove('expiresIn');
+      }
     }
 
     dispatch(authSlice.actions.setIsRefreshing(false));
