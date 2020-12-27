@@ -1,35 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import Cookies from 'universal-cookie';
 
 import api from '../../api';
-
-const setAuthInfoCookies = (idToken, refreshToken, expiresIn) => {
-  const cookies = new Cookies();
-
-  cookies.set(
-    'idToken',
-    idToken,
-    {
-      path: '/',
-      secure: true
-    }
-  );
-  cookies.set(
-    'refreshToken',
-    refreshToken,
-    {
-      path: '/',
-      secure: true
-    }
-  );
-  cookies.set(
-    'expiresIn',
-    expiresIn,
-    {
-      path: '/'
-    }
-  );
-};
+import helpers from './auth/helpers';
 
 const signUp = (email, password, history) => {
   return async dispatch => {
@@ -39,7 +11,7 @@ const signUp = (email, password, history) => {
     try {
       const response = await api.auth.signUp(email, password);
 
-      setAuthInfoCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
+      helpers.setAuthInfoCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
 
       dispatch(authSlice.actions.setAuthInfo({
         idToken: response.data.idToken,
@@ -74,7 +46,7 @@ const signIn = (email, password, history) => {
     try {
       const response = await api.auth.signIn(email, password);
 
-      setAuthInfoCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
+      helpers.setAuthInfoCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
 
       dispatch(authSlice.actions.setAuthInfo({
         idToken: response.data.idToken,
