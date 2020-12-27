@@ -1,0 +1,16 @@
+import axios from 'axios';
+
+import key from '../key';
+
+const signIn = async (email, password) => {
+  return await axios.post(
+    `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${key}`,
+    {
+      email,
+      password,
+      returnSecureToken: true
+    }
+  );
+};
+
+export default signIn;

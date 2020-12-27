@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Cookies from 'universal-cookie';
 
-import * as authApi from '../../api/auth';
+import api from '../../api';
 
 const setAuthInfoToCookies = (idToken, refreshToken, expiresIn) => {
   const cookies = new Cookies();
@@ -39,7 +39,7 @@ const signUp = (email, password, history) => {
     let errorMessage;
 
     try {
-      response = await authApi.signUp(email, password);
+      response = await api.auth.signUp(email, password);
     } catch (error) {
       errorMessage = error.response.data.error.message;
     }
@@ -77,7 +77,7 @@ const signIn = (email, password, history) => {
     let errorMessage;
 
     try {
-      response = await authApi.signIn(email, password);
+      response = await api.auth.signIn(email, password);
     } catch (error) {
       errorMessage = error.response.data.error.message;
     }
@@ -126,7 +126,7 @@ const refresh = () => {
     let errorMessage;
 
     try {
-      response = await authApi.refresh(refreshToken);
+      response = await api.auth.refresh(refreshToken);
     } catch (error) {
       errorMessage = error.response.data.error.message;
     }
