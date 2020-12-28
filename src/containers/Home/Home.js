@@ -3,17 +3,17 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 const Home = () => {
-  const idToken = useSelector(state => state.auth.idToken);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const history = useHistory();
 
   useEffect(() => {
-    if (!idToken) {
+    if (!isAuthenticated) {
       history.replace('/auth');
     }
-  }, [idToken, history]);
+  }, [isAuthenticated, history]);
 
   // TODO: This page will be implemented later.
-  if (idToken) {
+  if (isAuthenticated) {
     return (
       <div>HOME</div>
     );

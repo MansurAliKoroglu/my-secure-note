@@ -16,13 +16,13 @@ const Auth = () => {
 
   const errorMessage = useSelector(state => state.auth.errorMessage);
   const isSigningIn = useSelector(state => state.auth.isSigningIn);
-  const idToken = useSelector(state => state.auth.idToken);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const dispatch = useDispatch();
 
   const history = useHistory();
 
   useEffect(() => {
-    if (idToken) {
+    if (isAuthenticated) {
       history.replace('/');
     }
 
@@ -35,7 +35,7 @@ const Auth = () => {
     } else {
       setIsAuthModeSignInState(false);
     }
-  }, [idToken, history]);
+  }, [isAuthenticated, history]);
 
   const onSubmit = values => {
     if (isAuthModeSignInState) {
@@ -72,7 +72,7 @@ const Auth = () => {
       />;
   }
 
-  if (!idToken) {
+  if (!isAuthenticated) {
     return (
       <div className={classes.Auth}>
         <Formik

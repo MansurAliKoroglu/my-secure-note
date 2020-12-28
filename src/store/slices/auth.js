@@ -19,6 +19,7 @@ const refresh = () => {
       helpers.setAuthCookies(response.data.id_token, response.data.refresh_token, response.data.expires_in);
 
       dispatch(authSlice.actions.setAuthInfo({
+        isAuthenticated: true,
         idToken: response.data.id_token,
         refreshToken: response.data.refresh_token,
         expiresIn: response.data.expires_in,
@@ -58,6 +59,7 @@ const initialize = () => {
       helpers.setAuthCookies(response.data.id_token, response.data.refresh_token, response.data.expires_in);
 
       dispatch(authSlice.actions.setAuthInfo({
+        isAuthenticated: true,
         idToken: response.data.id_token,
         refreshToken: response.data.refresh_token,
         expiresIn: response.data.expires_in,
@@ -95,6 +97,7 @@ const signUp = (email, password, history) => {
       helpers.setAuthCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
 
       dispatch(authSlice.actions.setAuthInfo({
+        isAuthenticated: true,
         idToken: response.data.idToken,
         refreshToken: response.data.refreshToken,
         expiresIn: response.data.expiresIn,
@@ -130,6 +133,7 @@ const signIn = (email, password, history) => {
       helpers.setAuthCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
 
       dispatch(authSlice.actions.setAuthInfo({
+        isAuthenticated: true,
         idToken: response.data.idToken,
         refreshToken: response.data.refreshToken,
         expiresIn: response.data.expiresIn,
@@ -164,6 +168,7 @@ const authSlice = createSlice({
     isSigningIn: false,
     errorMessage: null,
     idToken: null,
+    isAuthenticated: false,
     refreshToken: null,
     expiresIn: null
   },
@@ -178,6 +183,7 @@ const authSlice = createSlice({
       state.errorMessage = action.payload;
     },
     setAuthInfo(state, action) {
+      state.isAuthenticated = action.payload.isAuthenticated;
       state.idToken = action.payload.idToken;
       state.refreshToken = action.payload.refreshToken;
       state.expiresIn = action.payload.expiresIn;
