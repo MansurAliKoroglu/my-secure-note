@@ -11,7 +11,7 @@ const signUp = (email, password, history) => {
     try {
       const response = await api.auth.signUp(email, password);
 
-      helpers.setAuthInfoCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
+      helpers.setAuthCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
 
       dispatch(authSlice.actions.setAuthInfo({
         idToken: response.data.idToken,
@@ -46,7 +46,7 @@ const signIn = (email, password, history) => {
     try {
       const response = await api.auth.signIn(email, password);
 
-      helpers.setAuthInfoCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
+      helpers.setAuthCookies(response.data.idToken, response.data.refreshToken, response.data.expiresIn);
 
       dispatch(authSlice.actions.setAuthInfo({
         idToken: response.data.idToken,
