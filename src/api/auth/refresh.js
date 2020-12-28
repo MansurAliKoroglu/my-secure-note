@@ -3,7 +3,7 @@ import axios from 'axios';
 import key from '../key';
 
 const refresh = async refreshToken => {
-  return await axios.post(
+  return axios.post(
     `https://securetoken.googleapis.com/v1/token?key=${key}`,
     {
       grant_type: 'refresh_token',

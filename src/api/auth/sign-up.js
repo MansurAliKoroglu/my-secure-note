@@ -3,7 +3,7 @@ import axios from 'axios';
 import key from '../key';
 
 const signUp = async (email, password) => {
-  return await axios.post(
+  return axios.post(
     `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`,
     {
       email,
