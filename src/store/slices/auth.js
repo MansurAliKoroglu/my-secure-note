@@ -1,7 +1,88 @@
 import { createSlice } from '@reduxjs/toolkit';
+import Cookies from 'universal-cookie';
 
 import api from '../../api';
 import helpers from './auth/helpers';
+
+const refresh = () => {
+  return async dispatch => {
+    const cookies = new Cookies();
+    const refreshToken = cookies.get('refreshToken');
+
+    if (!refreshToken) {
+      return;
+    }
+
+    try {
+      const response = await api.auth.refresh(refreshToken);
+
+      helpers.setAuthCookies(response.data.id_token, response.data.refresh_token, response.data.expires_in);
+
+      dispatch(authSlice.actions.setAuthInfo({
+        idToken: response.data.id_token,
+        refreshToken: response.data.refresh_token,
+        expiresIn: response.data.expires_in,
+      }));
+
+      setTimeout(() => {
+        dispatch(refresh());
+      }, response.data.expires_in * 1000 - 20000);
+    } catch (error) {
+      const errorMessage = error.response.data.error.message;
+
+      if (
+        errorMessage === 'TOKEN_EXPIRED' ||
+        errorMessage === 'USER_DISABLED' ||
+        errorMessage === 'USER_NOT_FOUND'
+      ) {
+        cookies.remove('idToken');
+        cookies.remove('refreshToken');
+        cookies.remove('expiresIn');
+      }
+    }
+  };
+};
+
+const initialize = () => {
+  return async dispatch => {
+    const cookies = new Cookies();
+    const refreshToken = cookies.get('refreshToken');
+
+    if (!refreshToken) {
+      return;
+    }
+
+    try {
+      const response = await api.auth.refresh(refreshToken);
+
+      helpers.setAuthCookies(response.data.id_token, response.data.refresh_token, response.data.expires_in);
+
+      dispatch(authSlice.actions.setAuthInfo({
+        idToken: response.data.id_token,
+        refreshToken: response.data.refresh_token,
+        expiresIn: response.data.expires_in,
+      }));
+
+      dispatch(authSlice.actions.completeInitialize());
+
+      setTimeout(() => {
+        dispatch(refresh());
+      }, response.data.expires_in * 1000 - 20000);
+    } catch (error) {
+      const errorMessage = error.response.data.error.message;
+
+      if (
+        errorMessage === 'TOKEN_EXPIRED' ||
+        errorMessage === 'USER_DISABLED' ||
+        errorMessage === 'USER_NOT_FOUND'
+      ) {
+        cookies.remove('idToken');
+        cookies.remove('refreshToken');
+        cookies.remove('expiresIn');
+      }
+    }
+  };
+};
 
 const signUp = (email, password, history) => {
   return async dispatch => {
@@ -79,6 +160,7 @@ const signIn = (email, password, history) => {
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
+    isInitializing: true,
     isSigningIn: false,
     errorMessage: null,
     idToken: null,
@@ -86,6 +168,9 @@ const authSlice = createSlice({
     expiresIn: null
   },
   reducers: {
+    completeInitialize(state) {
+      state.isInitializing = false;
+    },
     setIsSigningIn(state, action) {
       state.isSigningIn = action.payload;
     },
@@ -102,4 +187,4 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-export { signUp, signIn };
+export { initialize, signUp, signIn };
