@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
+import FloatingActionButton from './FloatingActionButton/FloatingActionButton';
+
 const Home = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const history = useHistory();
@@ -15,7 +17,9 @@ const Home = () => {
   // TODO: This page will be implemented later.
   if (isAuthenticated) {
     return (
-      <div>HOME</div>
+      <div>
+        <FloatingActionButton />
+      </div>
     );
   } else {
     return null;
