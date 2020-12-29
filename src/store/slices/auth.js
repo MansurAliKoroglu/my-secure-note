@@ -10,6 +10,8 @@ const refresh = () => {
     const refreshToken = cookies.get('refreshToken');
 
     if (!refreshToken) {
+      dispatch(authSlice.actions.completeInitialize());
+
       return;
     }
 
@@ -50,6 +52,8 @@ const initialize = () => {
     const refreshToken = cookies.get('refreshToken');
 
     if (!refreshToken) {
+      dispatch(authSlice.actions.completeInitialize());
+
       return;
     }
 
