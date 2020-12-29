@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import api from '../../api';
-import helpers from './auth/helpers';
 
 const signUp = (email, password, history) => {
   return async dispatch => {
@@ -9,9 +8,7 @@ const signUp = (email, password, history) => {
     dispatch(authSlice.actions.setError(null));
 
     try {
-      const refreshToken = await api.auth.signUp(email, password);
-
-      helpers.setAuthCookies(refreshToken);
+      await api.auth.signUp(email, password);
 
       dispatch(authSlice.actions.setIsAuthenticatedTrue());
 
@@ -37,9 +34,7 @@ const signIn = (email, password, history) => {
     dispatch(authSlice.actions.setError(null));
 
     try {
-      const refreshToken = await api.auth.signIn(email, password);
-
-      helpers.setAuthCookies(refreshToken);
+      await api.auth.signIn(email, password);
 
       dispatch(authSlice.actions.setIsAuthenticatedTrue());
 
