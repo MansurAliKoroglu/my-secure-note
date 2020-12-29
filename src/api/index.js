@@ -1,7 +1,9 @@
 import auth from './auth';
+import notes from './notes';
 
 const api = {
-  auth
+  auth,
+  notes
 };
 
 export default api;
