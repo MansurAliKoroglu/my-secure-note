@@ -1,4 +1,4 @@
-import firebase from '../firebase';
+import firebase from 'firebase';
 
 const signIn = async (email, password) => {
   const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
