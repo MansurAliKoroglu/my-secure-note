@@ -1,16 +1,9 @@
-import axios from 'axios';
-
-import key from '../key';
+import firebase from '../firebase';
 
 const signUp = async (email, password) => {
-  return axios.post(
-    `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`,
-    {
-      email,
-      password,
-      returnSecureToken: true
-    }
-  );
+  const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+
+  return userCredential.user.refreshToken;
 };
 
 export default signUp;
