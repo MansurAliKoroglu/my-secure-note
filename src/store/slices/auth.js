@@ -1,6 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
+import firebase from 'firebase';
 
 import api from '../../api';
+
+const initialize = () => {
+  return async dispatch => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        dispatch(authSlice.actions.setIsAuthenticatedTrue());
+      }
+
+      dispatch(authSlice.actions.completeInitialize());
+    });
+  };
+};
 
 const signUp = (email, password, history) => {
   return async dispatch => {
@@ -25,7 +38,7 @@ const signUp = (email, password, history) => {
     }
 
     dispatch(authSlice.actions.setIsSigningIn(false));
-  }
+  };
 };
 
 const signIn = (email, password, history) => {
@@ -57,20 +70,21 @@ const signIn = (email, password, history) => {
     }
 
     dispatch(authSlice.actions.setIsSigningIn(false));
-  }
+  };
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
+    isInitializing: true,
     isSigningIn: false,
     errorMessage: null,
     isAuthenticated: false
   },
   reducers: {
-    /*completeInitialize(state) {
+    completeInitialize(state) {
       state.isInitializing = false;
-    },*/
+    },
     setIsSigningIn(state, action) {
       state.isSigningIn = action.payload;
     },
@@ -85,4 +99,4 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 
-export { /*initialize,*/ signUp, signIn };
+export { initialize, signUp, signIn };
