@@ -1,12 +1,15 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch, Switch, Route } from 'react-router-dom';
 
-import FloatingActionButton from './FloatingActionButton/FloatingActionButton';
+import classes from './Home.module.css';
+
+import Sidebar from './Sidebar/Sidebar';
 
 const Home = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const history = useHistory();
+  const { path } = useRouteMatch();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -14,11 +17,23 @@ const Home = () => {
     }
   }, [isAuthenticated, history]);
 
-  // TODO: This page will be implemented later.
   if (isAuthenticated) {
     return (
       <div>
-        <FloatingActionButton />
+        <Sidebar />
+        <main className={classes.MainContent}>
+          <Switch>
+            <Route path={`${path}create-note`}>
+              {/* TODO: Create new note content */}
+            </Route>
+            <Route path={`${path}favorite-notes`}>
+              {/* TODO: List favorite notes content */}
+            </Route>
+            <Route path={`${path}`}>
+              {/* TODO: List all notes content */}
+            </Route>
+          </Switch>
+        </main>
       </div>
     );
   } else {

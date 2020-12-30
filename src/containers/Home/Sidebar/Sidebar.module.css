@@ -1,0 +1,30 @@
+.Sidebar {
+  width: 60px;
+  height: 100vh;
+  background-color: rgb(64, 72, 75);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  color: rgb(217, 239, 247);
+}
+
+.Icon {
+  margin: 0.5rem;
+}
+
+.AddIcon {
+  color: greenyellow;
+  margin: 1rem;
+}
+
+@media (min-width: 992px) {
+  .Icon {
+    margin: 1rem;
+  }
+
+  .AddIcon {
+    margin: 1.5rem;
+  }
+}
