@@ -2,29 +2,45 @@
   width: 60px;
   height: 100vh;
   background-color: rgb(64, 72, 75);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   position: fixed;
   color: rgb(217, 239, 247);
 }
 
+.SidebarContent {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.SelectedIndicator {
+  position: absolute;
+  background-color: rgb(0, 220, 0);
+  width: 3px;
+  left: 0;
+  transition: top .5s, height .5s;
+}
+
 .Icon {
-  margin: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
 }
 
 .AddIcon {
   color: greenyellow;
-  margin: 1rem;
+  margin: 0.5rem;
+  padding: 1rem;
 }
 
 @media (min-width: 992px) {
   .Icon {
-    margin: 1rem;
+    padding: 1rem;
   }
 
   .AddIcon {
-    margin: 1.5rem;
+    margin: 1rem;
+    padding: 1.5rem;
   }
 }
