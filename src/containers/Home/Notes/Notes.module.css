@@ -1,0 +1,22 @@
+.Notes {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Note {
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .Notes {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .Note {
+    margin: 1rem;
+  }
+}

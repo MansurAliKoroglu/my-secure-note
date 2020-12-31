@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useHistory, useRouteMatch, Switch, Route } from 'react-router-dom';
 
 import classes from './Home.module.css';
+import Notes from './Notes/Notes';
 
 import Sidebar from './Sidebar/Sidebar';
 
@@ -86,7 +87,7 @@ const Home = () => {
               {/* TODO: List favorite notes content */}
             </Route>
             <Route path={`${path}`}>
-              {/* TODO: List all notes content */}
+              <Notes />
             </Route>
           </Switch>
         </main>
