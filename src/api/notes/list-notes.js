@@ -13,7 +13,10 @@ const listNotes = async () => {
     .get();
 
   return new Promise((resolve) => {
-    query.forEach(note => userNotes.push(note.data()));
+    query.forEach(note => userNotes.push({
+      id: note.id,
+      ...note.data()
+    }));
 
     resolve(userNotes);
   });
