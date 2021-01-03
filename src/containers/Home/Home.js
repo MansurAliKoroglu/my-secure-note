@@ -18,13 +18,13 @@ const Home = () => {
   let currentPage;
 
   switch (history.location.pathname) {
-    case '/':
+    case '/notes':
       currentPage = 'notes';
       break;
-    case '/create-note':
+    case '/notes/create':
       currentPage = 'create-note';
       break;
-    case '/favorite-notes':
+    case '/notes/favorites':
       currentPage = 'favorite-notes';
       break;
     default:
@@ -56,7 +56,7 @@ const Home = () => {
 
     setCurrentPageState('create-note');
 
-    history.push(`${path}create-note`);
+    history.push(`${path}/create`);
   };
 
   const sidebarFavoriteNotesSelectionHandler = () => {
@@ -66,7 +66,7 @@ const Home = () => {
 
     setCurrentPageState('favorite-notes');
 
-    history.push(`${path}favorite-notes`);
+    history.push(`${path}/favorites`);
   };
 
   if (isAuthenticated) {
@@ -80,13 +80,13 @@ const Home = () => {
         />
         <main className={classes.MainContent}>
           <Switch>
-            <Route path={`${path}create-note`}>
+            <Route path={`${path}/create`}>
               {/* TODO: Create new note content */}
             </Route>
-            <Route path={`${path}favorite-notes`}>
+            <Route path={`${path}/favorites`}>
               {/* TODO: List favorite notes content */}
             </Route>
-            <Route path={`${path}`}>
+            <Route path={path}>
               <Notes />
             </Route>
           </Switch>

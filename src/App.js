@@ -1,4 +1,4 @@
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -26,8 +26,11 @@ function App() {
           <Route path="/auth">
             <Auth />
           </Route>
-          <Route path="/">
+          <Route path="/notes">
             <Home />
+          </Route>
+          <Route path="/">
+            <Redirect to="/notes" />
           </Route>
           <Route path="*">
             <NotFound />
