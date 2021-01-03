@@ -18,8 +18,10 @@ const Notes = () => {
   const notes = useSelector(state => state.notes.notes);
 
   useEffect(() => {
-    dispatch(getNotesFromServer());
-  }, [dispatch]);
+    if (isNotesLoading) {
+      dispatch(getNotesFromServer());
+    }
+  }, [isNotesLoading, dispatch]);
 
 
   if (isNotesLoading) {
