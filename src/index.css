@@ -18,7 +18,7 @@ h1 {
   margin: 0;
 }
 
-input {
+input, textarea {
   font: inherit;
   border: none;
   outline: none;

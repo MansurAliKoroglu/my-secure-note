@@ -6,6 +6,7 @@ import {
   useEffect
 } from 'react';
 import Loader from 'react-loader-spinner';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import classes from './Notes.module.css';
 
@@ -13,6 +14,9 @@ import { getNotesFromServer } from '../../../store/slices/notes';
 import Note from './Note/Note';
 
 const Notes = () => {
+  const history = useHistory();
+  const { path } = useRouteMatch();
+
   const dispatch = useDispatch();
   const isNotesLoading = useSelector(state => state.notes.isNotesLoading);
   const notes = useSelector(state => state.notes.notes);
@@ -23,6 +27,9 @@ const Notes = () => {
     }
   }, [isNotesLoading, dispatch]);
 
+  const noteClickHandler = index => {
+    history.push(`${path}/${index}`);
+  };
 
   if (isNotesLoading) {
     return (
@@ -41,11 +48,18 @@ const Notes = () => {
       </div>
     )
   } else {
-    const noteComponenets = notes.map(note => <Note key={note.id} title={note.title} className={[classes.Note]} />);
+    const noteComponents = notes.map((note, index) =>
+      <Note
+        key={note.id}
+        title={note.title}
+        className={[classes.Note]}
+        onClick={() => { noteClickHandler(index); }}
+      />
+    );
 
     return (
       <div className={classes.Notes}>
-        {noteComponenets}
+        {noteComponents}
       </div>
     );
   }

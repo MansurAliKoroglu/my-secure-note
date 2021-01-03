@@ -3,9 +3,15 @@ import {
   useEffect
 } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useRouteMatch, Switch, Route } from 'react-router-dom';
+import {
+  useHistory,
+  useRouteMatch,
+  Switch,
+  Route
+} from 'react-router-dom';
 
 import classes from './Home.module.css';
+import NoteDetail from './Notes/NoteDetail/NoteDetail';
 import Notes from './Notes/Notes';
 
 import Sidebar from './Sidebar/Sidebar';
@@ -18,9 +24,6 @@ const Home = () => {
   let currentPage;
 
   switch (history.location.pathname) {
-    case '/notes':
-      currentPage = 'notes';
-      break;
     case '/notes/create':
       currentPage = 'create-note';
       break;
@@ -28,7 +31,8 @@ const Home = () => {
       currentPage = 'favorite-notes';
       break;
     default:
-      throw new Error('There is an error');
+      currentPage = 'notes';
+      break;
   }
 
   const [currentPageState, setCurrentPageState] = useState(currentPage);
@@ -85,6 +89,9 @@ const Home = () => {
             </Route>
             <Route path={`${path}/favorites`}>
               {/* TODO: List favorite notes content */}
+            </Route>
+            <Route path={`${path}/:id`}>
+              <NoteDetail />
             </Route>
             <Route path={path}>
               <Notes />
