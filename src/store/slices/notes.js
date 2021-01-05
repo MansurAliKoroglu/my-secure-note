@@ -13,6 +13,25 @@ const getNotesFromServer = () => {
   };
 };
 
+const updateNote = note => {
+  return async (dispatch, getState) => {
+    await api.notes.updateNote(note);
+
+    const updatedNotes = [...getState().notes.notes];
+    const noteIndex = updatedNotes.findIndex(element => element.id === note.id);
+
+    const updatedNote = {
+      id: updatedNotes[noteIndex].id,
+      title: note.title,
+      note: note.note
+    };
+
+    updatedNotes[noteIndex] = updatedNote;
+
+    dispatch(notesSlice.actions.setNotes(updatedNotes));
+  };
+};
+
 const notesSlice = createSlice({
   name: 'notes',
   initialState: {
@@ -25,10 +44,10 @@ const notesSlice = createSlice({
     },
     setNotes(state, action) {
       state.notes = action.payload;
-    },
+    }
   }
 });
 
 export default notesSlice.reducer;
 
-export { getNotesFromServer };
+export { getNotesFromServer, updateNote };
