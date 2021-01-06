@@ -9,7 +9,8 @@ import {
 import {
   faClipboard,
   faPlusCircle,
-  faStar
+  faStar,
+  faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 import classes from './Sidebar.module.css';
@@ -46,6 +47,10 @@ const Sidebar = props => {
     setSelectedIndicatorStyleState(selectedIndicatorStyle);
   }, [props.selectedIcon]);
 
+  const signOut = () => {
+    // TODO sign out here.
+  };
+
   return (
     <div className={classes.Sidebar}>
       <div className={classes.SidebarContent}>
@@ -80,6 +85,15 @@ const Sidebar = props => {
         >
           <FontAwesomeIcon
             icon={faStar}
+            size="lg"
+          />
+        </div>
+        <div
+          className={[classes.Icon, classes.SignOutIcon].join(' ')}
+          onClick={signOut}
+        >
+          <FontAwesomeIcon
+            icon={faSignOutAlt}
             size="lg"
           />
         </div>

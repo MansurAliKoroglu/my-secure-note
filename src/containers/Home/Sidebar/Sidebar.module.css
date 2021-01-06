@@ -34,6 +34,14 @@
   padding: 1rem;
 }
 
+.SignOutIcon {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  padding: 1rem 0;
+}
+
 @media (min-width: 992px) {
   .Icon {
     padding: 1rem;
