@@ -12,13 +12,19 @@ import {
   faStar,
   faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
+import firebase from 'firebase';
+import { useDispatch } from 'react-redux';
 
 import classes from './Sidebar.module.css';
+
+import { setIsAuthenticatedFalse } from '../../../store/slices/auth';
 
 const Sidebar = props => {
   const notesIconRef = useRef(null);
   const addIconRef = useRef(null);
   const favoriteNotesIconRef = useRef(null);
+
+  const dispatch = useDispatch();
 
   const [selectedIndicatorStyleState, setSelectedIndicatorStyleState] = useState(null);
 
@@ -48,7 +54,9 @@ const Sidebar = props => {
   }, [props.selectedIcon]);
 
   const signOut = () => {
-    // TODO sign out here.
+    firebase.auth().signOut();
+
+    dispatch(setIsAuthenticatedFalse());
   };
 
   return (

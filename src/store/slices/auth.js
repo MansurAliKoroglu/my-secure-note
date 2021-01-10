@@ -93,6 +93,9 @@ const authSlice = createSlice({
     },
     setIsAuthenticatedTrue(state) {
       state.isAuthenticated = true;
+    },
+    setIsAuthenticatedFalse(state) {
+      state.isAuthenticated = false;
     }
   }
 });
@@ -100,3 +103,5 @@ const authSlice = createSlice({
 export default authSlice.reducer;
 
 export { initialize, signUp, signIn };
+
+export const setIsAuthenticatedFalse = authSlice.actions.setIsAuthenticatedFalse;
