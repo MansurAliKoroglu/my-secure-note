@@ -49,10 +49,10 @@ const Home = () => {
   }, [isAuthenticated, history]);
 
   useEffect(() => {
-    if (isNotesLoading) {
+    if (isNotesLoading && isAuthenticated) {
       dispatch(getNotesFromServer());
     }
-  }, [isNotesLoading, dispatch]);
+  }, [isNotesLoading, isAuthenticated, dispatch]);
 
   const sidebarNotesSelectionHandler = () => {
     if (history.location.pathname === '/') {
